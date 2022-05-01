@@ -12,6 +12,20 @@ const go = {
       "Greet": (arg1) => {
         return window.go.main.App.Greet(arg1);
       },
+      /**
+       * GreetAsyncViaChannel
+       * @returns {Promise<any>}  - Go Type: <-chan string
+       */
+      "GreetAsyncViaChannel": () => {
+        return window.go.main.App.GreetAsyncViaChannel();
+      },
+      /**
+       * GreetAsyncViaEvent
+       * @returns {Promise<void>} 
+       */
+      "GreetAsyncViaEvent": () => {
+        return window.go.main.App.GreetAsyncViaEvent();
+      },
     },
   },
 

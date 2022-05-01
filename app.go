@@ -3,6 +3,9 @@ package main
 import (
 	"context"
 	"fmt"
+	"github.com/wailsapp/wails/v2/pkg/runtime"
+	"log"
+	"time"
 )
 
 // App struct
@@ -41,4 +44,28 @@ func (a *App) shutdown(ctx context.Context) {
 // Greet returns a greeting for the given name
 func (a *App) Greet(name string) string {
 	return fmt.Sprintf("Hello %s, It's show time!", name)
+}
+
+func (a *App) GreetAsyncViaChannel() <-chan string {
+	messages := make(chan string)
+	go func() {
+		defer close(messages)
+		for _, m := range []string{"Hello A (from server)", "Hello B (from server)", "Hello C (from server)", "DONE"} {
+			log.Println(m)
+			messages <- m
+			time.Sleep(1 * time.Second)
+		}
+	}()
+
+	return messages // FAT | json: unsupported type: <-chan string
+}
+
+func (a *App) GreetAsyncViaEvent() {
+	go func() {
+		for _, m := range []string{"Hello A (from server)", "Hello B (from server)", "Hello C (from server)", "DONE"} {
+			runtime.EventsEmit(a.ctx, "rcv:greet", m)
+			log.Println(m)
+			time.Sleep(1 * time.Second)
+		}
+	}()
 }

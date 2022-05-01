@@ -25,6 +25,18 @@ window.greet = function () {
   }
 };
 
+runtime.EventsOn("rcv:greet", (msg) => document.getElementById("result").innerText = msg)
+window.greetAsyncViaEvent = () => {
+  // noinspection JSIgnoredPromiseFromCall
+  window.go.main.App.GreetAsyncViaEvent();
+}
+
+window.greetAsyncViaChannel = () => {
+  // noinspection JSIgnoredPromiseFromCall
+  window.go.main.App.GreetAsyncViaChannel(); // cannot access data from channel => FAT | json: unsupported type: <-chan string
+}
+
+
 nameElement.onkeydown = function (e) {
   if (e.keyCode == 13) {
     window.greet();
